@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/normalize.min.css">
+	<style type="text/css" media="screen">
+		*{margin:0;padding:0;}
+		/*Set your wrapper to full width and height*/
+		.wrapper{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;}
+		/*Style your wrapper background to center*/
+		.wrapper{background:url('') no-repeat;background-size:cover;background-position:center center;}
+		/*Set your wrapper to allow auto overflow of internal content*/
+		.wrapper{overflow:auto;}
+		/*Content container width and inner object*/
+		.content{padding-left:10%;padding-right:10%;width:80%;}
+		.content *{width:100%;}
+		/*Hightlight safe zone - Remove this prior to delivery*/
+		.left{width:10%;height:100%;position:absolute;top:0;left:0;background:red;opacity:0.4;z-index:99;}
+		.right{width:10%;height:100%;position:absolute;top:0;right:0;background:red;opacity:0.4;z-index:99;}
+		.left p,.right p{position:relative;top:50%;transform:translateY(-50%);margin-top:auto;margin-bottom:auto;text-align:center;}
+		/*Debug the height and width of the window - Remove this prior to delivery*/
+		#dimensions{position:absolute;top:50%;transform:translateY(-50%);z-index:100;width:100%;}
+		#dimensions p{margin-top:auto;margin-bottom:auto;text-align:center;}
+	</style>
+	<script type="text/javascript">
+		var creative = {
+			app: "app",
+			issue: "yyymmdd",
+			advertiser: "advertiser",
+			campaign: "campaign",
+			ga: "UA-69628544-10",
+			detail: function(){return this.app+"|"+this.issue+"|"+this.advertiser+"|"+this.campaign;}
+		}
+	</script>
+    </head>
+    <body>
+	<!-- Remove line for PRODUCTION -->
+	<a style="position:absolute;bottom:0;right:0;z-index:9999;" onclick="javascript:window.history.back();">Back</a>
+	<!-- Remove line for PRODUCTION END -->
+	<div id="wrapper" class="wrapper">
+		<svg width="100%" height="100%" >
+		  <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:rgb(0,0,0);stroke-width:1" />  
+		  <line x1="0" y1="100%" x2="100%" y2="0" style="stroke:rgb(0,0,0);stroke-width:1" />  
+		</svg>
+		<div id="dimensions"></div>
+		<div class="content">
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam nunc, imperdiet at malesuada et, ultrices sit amet enim. Aliquam elit massa, posuere eget ipsum ac, finibus aliquet eros. Integer dapibus aliquet tincidunt. Etiam in massa at metus pharetra ultricies lobortis facilisis arcu. Morbi posuere id nunc eu ultrices. Donec rhoncus elit vitae pretium dictum. Curabitur elit justo, efficitur ut facilisis vitae, dignissim eget nulla. Donec eu enim sem. Vestibulum eget felis pellentesque, rhoncus mi id, bibendum odio. Ut vulputate lobortis lorem, eget vehicula neque sodales eget. Sed dignissim maximus molestie. Suspendisse fringilla ornare lacus, non cursus urna bibendum sit amet. Curabitur justo tellus, mattis sit amet velit ac, tincidunt blandit nulla. Integer ornare varius ex sit amet varius. Donec eu enim vitae lacus eleifend viverra id quis sapien.
+			</p>
+			<img src="images/1024x768.jpg" />
+			<p>
+				Morbi euismod lorem non cursus commodo. Proin tincidunt ultricies quam, ut ultricies velit ullamcorper at. Aenean iaculis non tortor sed semper. Suspendisse vitae quam eu odio lacinia interdum. Donec volutpat erat sed dolor aliquam dignissim. Nam pharetra purus eget nibh elementum, vel lobortis felis posuere. In hac habitasse platea dictumst. Vivamus condimentum urna orci. In hac habitasse platea dictumst. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut sit amet mi augue.
+			</p>
+		</div>
+	</div>
+	<div class="left">
+		<p>
+			Safe Zone
+		</p>
+	</div>
+	<div class="right">
+		<p>
+			Safe Zone
+		</p>
+	</div>
+	<script src="js/eco.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	// 2. Some window size code - feel free to remove
+	function displayWindowSize() {
+		// size calculation code here
+		var myWidth = 0,
+			myHeight = 0;
+		if (typeof(window.innerWidth) == 'number') {
+			myWidth = window.innerWidth;
+			myHeight = window.innerHeight;
+		} else if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
+			myWidth = document.documentElement.clientWidth;
+			myHeight = document.documentElement.clientHeight;
+		} else if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
+			myWidth = document.body.clientWidth;
+			myHeight = document.body.clientHeight;
+		}
+		document.getElementById("dimensions").innerHTML = "<p>" + myWidth + " " + myHeight + "</p>";
+	};
+
+	window.onload = function(){
+		displayWindowSize();
+	}
+	window.onresize = displayWindowSize;
+
+	ecoStart = function() {
+		ecoPixel('phonepixel','tabletpixel','[timestamp]');
+		// animation start up code here
+	}
+	ecoHeatmap("wrapper");
+	</script>
+    </body>
+</html>

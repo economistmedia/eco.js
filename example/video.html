@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/normalize.min.css">
+	<style type="text/css" media="screen">
+		*{margin:0 !important;padding:0 !important;overflow:hidden;}
+		#wrapper{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;}
+		#wrapper *{width:100%;}
+		#wrapper video {width:100%;height:100%;}
+		#controls {position:absolute;bottom:0;z-index:999;font-size:1.2em;}
+		/* Mobile Portrait */
+		@media screen and (min-width: 320px) and (max-width: 736px) and (orientation:portrait)	{
+			#wrapper{
+				background:url('images/750x1334.jpg') no-repeat;background-size:contain;
+			}
+		}
+		/* Mobile Landscape */
+		@media screen and (min-width: 320px) and (max-width: 736px) and (orientation:landscape)	{
+			#wrapper{
+				background:url('images/1334x750.jpg') no-repeat;background-size:contain;
+			}
+		}
+		/* Tablet Portrait */
+		@media screen and (min-width:768px)	and (orientation:portrait)	{
+			#wrapper{
+				background:url('images/768x1024.jpg') no-repeat;background-size:contain;
+			}
+		}
+		/* Tablet Landscape */
+		@media screen and (min-width:768px) and (orientation:landscape)	{
+			#wrapper{
+				background:url('images/1024x768.jpg') no-repeat;background-size:contain;
+			}
+		}
+	</style>
+	<script type="text/javascript">
+	var creative = {
+		app: "app",
+		issue: "yyymmdd",
+		advertiser: "advertiser",
+		campaign: "campaign",
+		ga: "UA-69628544-10",
+		detail: function(){return this.app+"|"+this.issue+"|"+this.advertiser+"|"+this.campaign;}
+	}
+	</script>
+</head>
+<body>
+	<!-- Remove line for PRODUCTION -->
+	<a style="position:absolute;bottom:0;right:0;z-index:9999;" onclick="javascript:window.history.back();">Back</a>
+	<!-- Remove line for PRODUCTION END -->
+	
+	<div id="wrapper">
+		<video id="video" webkit-playsinline muted>
+			<source src="http://html5demos.com/assets/dizzy.mp4" type="video/mp4" />
+		</video>
+		<div id="controls">
+			<span>Video Controls </span>|
+			<a id="play">Play </a>|
+			<a id="pause">Pause </a>|
+			<a id="mute">Mute </a>|
+			<a id="unmute">Unmute</a>
+		</div>
+	</div>
+	<script src="js/eco.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	// app signels the creative to begin animation
+	ecoStart = function() {
+		// viewable impression reporting (supports mobile and tablet with timestamp to cache bust)
+		ecoPixel('phonepixel','tabletpixel','[timestamp]');
+		// animation start up code here
+	}
+
+	// heatmap reporting insert wrapper ID
+	ecoHeatmap('wrapper');
+	// video reporting 
+	ecoVideo('video','play');
+
+	// custom video param and controls
+	(function(){
+	
+		document.getElementById("pause").addEventListener('click', function(){
+			document.getElementById("video").pause();
+		});
+		document.getElementById("mute").addEventListener('click', function(){
+			document.getElementById("video").muted = true;
+			document.getElementById("video").volume = 0;
+		});
+		document.getElementById("unmute").addEventListener('click', function(){
+			document.getElementById("video").muted = false;
+			document.getElementById("video").volume = 1.0;
+		});
+	})();
+	</script>
+</body>
+</html>
