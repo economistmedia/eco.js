@@ -32,19 +32,19 @@ ecoPixel = function(phone,tablet,macro){
 			if (isMobile.phone) {
 				image.src = phone.replace(macro, cacheBuster());
 				console.log("IMPRESSION PHONE: " +phone.replace(macro, cacheBuster()));
-				ga('send', 'event', 'ad', 'view', creative.detail(), dwellTime(), {nonInteraction: true});
+				ga('send', 'event', 'ad', 'view', creative.detail().toLowerCase(), dwellTime(), {nonInteraction: true});
 			} else {
 				image.src = tablet.replace(macro, cacheBuster());
 				console.log("IMPRESSION TABLET: " +tablet.replace(macro, cacheBuster()));
-				ga('send', 'event', 'ad', 'view', creative.detail(), dwellTime(), {nonInteraction: true});
+				ga('send', 'event', 'ad', 'view', creative.detail().toLowerCase(), dwellTime(), {nonInteraction: true});
 			}
 		} else {
 			if (isMobile.phone) {
-				ga('send', 'event', 'ad', 'view', creative.detail(), dwellTime(), {nonInteraction: true});
+				ga('send', 'event', 'ad', 'view', creative.detail().toLowerCase(), dwellTime(), {nonInteraction: true});
 				image.src = phone;
 				console.log("IMPRESSION PHONE: " +phone);
 			} else {
-				ga('send', 'event', 'ad', 'view', creative.detail(), dwellTime(), {nonInteraction: true});
+				ga('send', 'event', 'ad', 'view', creative.detail().toLowerCase(), dwellTime(), {nonInteraction: true});
 				image.src = tablet;
 				console.log("IMPRESSION TABLET: " +tablet);
 			}
@@ -60,15 +60,15 @@ ecoLink = function(phone,tablet) {
 	if (isMobile.phone) {
 		console.log("URL PHONE: " + phone);
 		window.location = "internal-" + phone;
-		ga('send', 'event', 'external', 'link', creative.detail(), dwellTime());
+		ga('send', 'event', 'external', 'link', creative.detail().toLowerCase(), dwellTime());
 	} else if (tablet !== undefined) {
 		console.log("URL TABLET: " + tablet);
 		window.location = "internal-" + tablet;
-		ga('send', 'event', 'external', 'link', creative.detail(), dwellTime());
+		ga('send', 'event', 'external', 'link', creative.detail().toLowerCase(), dwellTime());
 	} else {
 		console.log("URL: " + phone);
 		window.location = "internal-" + phone;
-		ga('send', 'event', 'external', 'link', creative.detail(), dwellTime());
+		ga('send', 'event', 'external', 'link', creative.detail().toLowerCase(), dwellTime());
 	}
 }
 
@@ -83,7 +83,7 @@ ecoHeatmap = function(a) {
 			o: orientationCheck(),
 		}
 		console.log("HEATMAP: " + JSON.stringify(tracking));
-		ga('send', 'event', 'heatmap', JSON.stringify(tracking), creative.detail(), dwellTime(), {nonInteraction: true});
+		ga('send', 'event', 'heatmap', JSON.stringify(tracking), creative.detail().toLowerCase(), dwellTime(), {nonInteraction: true});
 	});
 }
 
@@ -99,48 +99,48 @@ ecoVideo = function(video,trigger) {
 	// 25% completion
 	myVideo.addEventListener("timeupdate", function(){
 		if(myQuartile()>25){
-			console.log("firstQuartile: " + creative.detail()+"|"+video + "|" + myQuartile());
-			ga('send', 'event', 'video', 'firstQuartile', creative.detail()+"|"+video, myQuartile(), {nonInteraction: true});
+			console.log("firstQuartile: " + creative.detail().toLowerCase()+"|"+video + "|" + myQuartile());
+			ga('send', 'event', 'video', 'firstQuartile', creative.detail().toLowerCase()+"|"+video, myQuartile(), {nonInteraction: true});
 			this.removeEventListener("timeupdate", arguments.callee);
 		}
 	});
 	// 50% completion
 	myVideo.addEventListener("timeupdate", function(){
 		if(myQuartile()>50){
-			console.log("secondQuartile: " + creative.detail()+"|"+video + "|" + myQuartile());
-			ga('send', 'event', 'video', 'secondQuartile', creative.detail()+"|"+video, myQuartile(), {nonInteraction: true});
+			console.log("secondQuartile: " + creative.detail().toLowerCase()+"|"+video + "|" + myQuartile());
+			ga('send', 'event', 'video', 'secondQuartile', creative.detail().toLowerCase()+"|"+video, myQuartile(), {nonInteraction: true});
 			this.removeEventListener("timeupdate", arguments.callee);
 		}
 	});
 	// 75% completion
 	myVideo.addEventListener("timeupdate", function(){
 		if(myQuartile()>75){
-			console.log("thirdQuartile: " + creative.detail()+"|"+video + "|" + myQuartile());
-			ga('send', 'event', 'video', 'thirdQuartile', creative.detail()+"|"+video, myQuartile(), {nonInteraction: true});
+			console.log("thirdQuartile: " + creative.detail().toLowerCase()+"|"+video + "|" + myQuartile());
+			ga('send', 'event', 'video', 'thirdQuartile', creative.detail().toLowerCase()+"|"+video, myQuartile(), {nonInteraction: true});
 			this.removeEventListener("timeupdate", arguments.callee);
 		}
 	});
 	myVideo.addEventListener("play",function(){
 		if (played == 0) {
-			console.log("play: " + creative.detail()+"|"+video +"|"+ myQuartile());
-			ga('send', 'event', 'video', 'play', creative.detail()+"|"+video, myQuartile());
+			console.log("play: " + creative.detail().toLowerCase()+"|"+video +"|"+ myQuartile());
+			ga('send', 'event', 'video', 'play', creative.detail().toLowerCase()+"|"+video, myQuartile());
 			// quartileEvents();
 			played++;
 		} else {
 			myVideo.play();
-			console.log("Resume: " + creative.detail()+"|"+video +"|"+ myQuartile());
-			ga('send', 'event', 'video', 'resume', creative.detail()+"|"+video, myQuartile());
+			console.log("Resume: " + creative.detail().toLowerCase()+"|"+video +"|"+ myQuartile());
+			ga('send', 'event', 'video', 'resume', creative.detail().toLowerCase()+"|"+video, myQuartile());
 		}
 	}, false)
 	myVideo.addEventListener("pause",function(){
 		if(myQuartile()<100){
-			console.log("Pause: " + creative.detail()+"|"+video +"|"+ myQuartile());
-			ga('send', 'event', 'video', 'pause', creative.detail()+"|"+video, myQuartile());
+			console.log("Pause: " + creative.detail().toLowerCase()+"|"+video +"|"+ myQuartile());
+			ga('send', 'event', 'video', 'pause', creative.detail().toLowerCase()+"|"+video, myQuartile());
 		}
 	}, false)
 	myVideo.addEventListener("ended",function() {
-		console.log("Ended: " + creative.detail()+"|"+video +"|"+ myQuartile());
-		ga('send', 'event', 'video', 'ended', creative.detail()+"|"+video, myQuartile(), {nonInteraction: true});
+		console.log("Ended: " + creative.detail().toLowerCase()+"|"+video +"|"+ myQuartile());
+		ga('send', 'event', 'video', 'ended', creative.detail().toLowerCase()+"|"+video, myQuartile(), {nonInteraction: true});
 		if (document.exitFullscreen) {
 			document.exitFullscreen();
 		} else if (document.msExitFullscreen) {
@@ -170,28 +170,26 @@ ecoVideo = function(video,trigger) {
 }
 
 //Custom google event method
-ecoCustom = function(action) {ga('send', 'event', 'custom', action , creative.detail(), dwellTime());}
+ecoCustom = function(action) {ga('send', 'event', 'custom', action , creative.detail().toLowerCase(), dwellTime());}
 
 window.onload = function(){
 	ga('create', creative.ga, 'auto');
 	ga('set', 'checkProtocolTask', null);
 	ga('set', 'checkStorageTask', null);
 	ga('send', 'screenview', {
-		'appName' : creative.app,
-		'screenName' : creative.detail(),
+		'appName' : creative.app.toLowerCase(),
+		'screenName' : creative.detail().toLowerCase(),
 	});
-	ga('send', 'event', 'ad', 'load', creative.detail(), {nonInteraction: true});
-	console.log("DEBUG ENABLED");
-	console.log("CAMPAIGN: "+creative.detail());
+	ga('send', 'event', 'ad', 'load', creative.detail().toLowerCase(), {nonInteraction: true});
+	console.log("CAMPAIGN: "+creative.detail().toLowerCase());
 	console.log("GA: "+creative.ga);
-	console.log("ORIENTATION: "+orientationCheck());
 	if (window.onpagehide || window.onpagehide === null) {
 		window.addEventListener('pagehide', function(){
-			ga('send', 'event', 'ad', 'hide', creative.detail(), dwellTime(), {nonInteraction: true});
+			ga('send', 'event', 'ad', 'hide', creative.detail().toLowerCase(), dwellTime(), {nonInteraction: true});
 		}, false);
 	} else {
 		window.addEventListener('unload', function(){
-			ga('send', 'event', 'ad', 'hide', creative.detail(), dwellTime(), {nonInteraction: true});
+			ga('send', 'event', 'ad', 'hide', creative.detail().toLowerCase(), dwellTime(), {nonInteraction: true});
 		}, false);
 	}
 };

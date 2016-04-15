@@ -25,10 +25,10 @@
 	</style>
 	<script type="text/javascript">
 		var creative = {
-			app: "app",
-			issue: "yyymmdd",
-			advertiser: "advertiser",
-			campaign: "campaign",
+			app: "APP",
+			issue: "YYYYMMDD",
+			advertiser: "ADVERTISER",
+			campaign: "CAMPAIGN",
 			ga: "UA-69628544-10",
 			detail: function(){return this.app+"|"+this.issue+"|"+this.advertiser+"|"+this.campaign;}
 		}
@@ -84,15 +84,14 @@
 		document.getElementById("dimensions").innerHTML = "<p>" + myWidth + " " + myHeight + "</p>";
 	};
 
-	window.onload = function(){
-		displayWindowSize();
-	}
 	window.onresize = displayWindowSize;
 
 	ecoStart = function() {
 		ecoPixel('phonepixel','tabletpixel','[timestamp]');
 		// animation start up code here
+		displayWindowSize();
 	}
+
 	ecoHeatmap("wrapper");
 	</script>
     </body>
