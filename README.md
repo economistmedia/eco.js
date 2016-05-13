@@ -72,7 +72,6 @@ Include the eco.js script in the HEAD of your index.html :
 
 * `eco.run.ad('debugMode');`
  Run the ad in debug mode for browser testing.
-
 * `eco.run.ad());`
  Run the ad in production mode. Will not work in browser.
 
