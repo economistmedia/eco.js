@@ -1,0 +1,46 @@
+/* static.html */
+* {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+#wrapper {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+
+/*Hightlight safe zone - Remove this prior to delivery*/
+.left {
+	width: 10%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: red;
+	opacity: 0.4;
+	z-index: 99;
+}
+.right {
+	width: 10%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: red;
+	opacity: 0.4;
+	z-index: 99;
+}
+.left p,.right p {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	margin-top: auto;
+	margin-bottom: auto;
+	text-align: center;
+}

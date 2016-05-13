@@ -1,65 +1,84 @@
 <!doctype html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/normalize.min.css">
-	<style type="text/css" media="screen">
-		*{margin:0;padding:0;overflow:hidden;}
-		#wrapper{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;}
+	<head>
+	    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+	    <link rel="stylesheet" href="css/normalize.min.css">
+	    <link rel="stylesheet" href="css/eco.css">
+		<style type="text/css" media="screen">
 		/* Mobile Portrait */
-		@media screen and (min-width: 320px) and (max-width: 736px) and (orientation:portrait)	{
-			#wrapper{
-				background:url('images/750x1334.jpg') no-repeat;background-size:contain;
+		@media screen and (min-width: 320px) and (max-width: 736px) and (orientation:portrait) {
+			#wrapper {
+				background: url('images/750x1334.jpg') no-repeat;
+				background-size: contain;
 			}
 		}
 		/* Mobile Landscape */
-		@media screen and (min-width: 320px) and (max-width: 736px) and (orientation:landscape)	{
-			#wrapper{
-				background:url('images/1334x750.jpg') no-repeat;background-size:contain;
+		@media screen and (min-width: 320px) and (max-width: 736px) and (orientation:landscape) {
+			#wrapper {
+				background: url('images/1334x750.jpg') no-repeat;
+				background-size: contain;
 			}
 		}
 		/* Tablet Portrait */
-		@media screen and (min-width:768px)	and (orientation:portrait)	{
-			#wrapper{
-				background:url('images/768x1024.jpg') no-repeat;background-size:contain;
+		@media screen and (min-width:768px)	and (orientation:portrait) {
+			#wrapper {
+				background: url('images/768x1024.jpg') no-repeat;
+				background-size: contain;
 			}
 		}
 		/* Tablet Landscape */
-		@media screen and (min-width:768px) and (orientation:landscape)	{
-			#wrapper{
-				background:url('images/1024x768.jpg') no-repeat;background-size:contain;
+		@media screen and (min-width:768px) and (orientation:landscape) {
+			#wrapper {
+				background: url('images/1024x768.jpg') no-repeat;
+				background-size: contain;
 			}
 		}
-	</style>
-<script type="text/javascript">
-	var creative = {
-		app: "APP",
-		issue: "YYYYMMDD",
-		advertiser: "ADVERTISER",
-		campaign: "CAMPAIGN",
-		ga: "UA-69628544-10",
-		detail: function(){return this.app+"|"+this.issue+"|"+this.advertiser+"|"+this.campaign;}
-	}
-</script>
-</head>
-<body>
-	<!-- Remove line for PRODUCTION -->
-	<a style="position:absolute;bottom:0;right:0;z-index:9999;" onclick="javascript:window.history.back();">Back</a>
-	<!-- Remove line for PRODUCTION END -->
+		</style>
+		<script src="js/eco.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!-- Remove line for PRODUCTION -->
+		<a style="position:absolute;bottom:0;left:0;z-index:9999;display:block;width:100%;text-align:center;background-color:black;color:white;" onclick="javascript:window.history.back();">Back</a>
+		<!-- Remove line for PRODUCTION END -->
 
-	<a id="a" onclick=ecoLink('phonelink','tabletlink');>
-		<div id="wrapper">
-			&nbsp;
+		<a id="a" onclick=eco.open('http://bit.ly/ecoOpenUBS');>
+			<div id="wrapper">
+				&nbsp;
+			</div>
+		</a>
+		<div class="left">
+			<p>
+				Safe Zone
+			</p>
 		</div>
-	</a>
-	<script src="js/eco.js" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript">
-	var ecoStart = function() {
-		ecoPixel('phonepixel','tabletpixel','[timestamp]');
-		// animation start up code here
-	}
-	ecoHeatmap('wrapper');
-	</script>
-</body>
+		<div class="right">
+			<p>
+				Safe Zone
+			</p>
+		</div>
+		<script type="text/javascript">
+		// 1. Create any custom code required for your ad to work here
+	
+		// 2. Configure the ad with important campaign details
+		eco.config.gaClient('UA-XXXXXXXX-X');
+		eco.config.app('economist');
+		eco.config.advertiser('advertiser');
+		eco.config.campaign('rich media');
+		eco.config.issue('issue');
+	
+		// 3. Add impression tracking to the or video and heatmap to the ad
+		eco.impression.phone('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=phone&ord=[timestamp]');
+		eco.impression.tablet('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=tablet&ord=[timestamp]');
+		eco.impression.timestamp('[timestamp]');
+		eco.heatmap('wrapper');
+	
+		// 4. Add your custom tasks to the task queue
+
+		// 5. Run your ad
+		// eco.run.ad("debugMode");
+		eco.run.ad();
+	
+		</script>
+	</body>
 </html>
