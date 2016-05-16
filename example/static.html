@@ -35,7 +35,7 @@
 			}
 		}
 		</style>
-		<script src="js/eco.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/eco.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 		<!-- Remove line for PRODUCTION -->
@@ -59,25 +59,21 @@
 		</div>
 		<script type="text/javascript">
 		// 1. Create any custom code required for your ad to work here
-	
+		function output(){
+			console.log("output");
+		}
 		// 2. Configure the ad with important campaign details
-		eco.config.gaClient('UA-XXXXXXXX-X');
-		eco.config.app('economist');
-		eco.config.advertiser('advertiser');
-		eco.config.campaign('rich media');
-		eco.config.issue('issue');
+		eco.config.gaClient('UA-XXXXXXXX-X').app('economist').advertiser('advertiser').campaign('rich media').issue('issue');
 	
 		// 3. Add impression tracking to the or video and heatmap to the ad
-		eco.impression.phone('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=phone&ord=[timestamp]');
-		eco.impression.tablet('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=tablet&ord=[timestamp]');
-		eco.impression.timestamp('[timestamp]');
+		eco.impression.phone('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=phone&ord=[timestamp]').tablet('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=tablet&ord=[timestamp]').timestamp('[timestamp]');
 		eco.heatmap('wrapper');
 	
 		// 4. Add your custom tasks to the task queue
+		eco.queue.addTask(output);
 
 		// 5. Run your ad
-		// eco.run.ad("debugMode");
-		eco.run.ad();
+		eco.ad.debug();
 	
 		</script>
 	</body>

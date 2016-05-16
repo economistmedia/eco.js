@@ -64,7 +64,7 @@
 		video {width:85% !important;display: block;margin: 10px auto;}
 		#controls {width:85% !important;display: block;margin: 0 auto;text-align:center; margin:10px 0;}
 		</style>
-		<script src="js/eco.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/eco.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>		
 		<!-- Remove line for PRODUCTION -->
@@ -154,12 +154,11 @@
 		eco.video('ubs','play');
 	
 		// 4. Add your custom tasks to the task queue
-		eco.queue(displayWindowSize);
-		eco.queue(videoControls);
+		eco.queue.addTask(displayWindowSize);
+		eco.queue.addTask(videoControls);
 
 		// 5. Run your ad
-		// eco.run.ad("debugMode");
-		eco.run.ad();
+		eco.ad.debug();
 
 		</script>
 	</body>

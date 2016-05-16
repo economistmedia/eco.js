@@ -16,24 +16,24 @@ var _debugMode = false;
 //ecoStart
 function ecoStart() {
 	if (_adReady) {
-		console.log((new Date).getTime() + ": ad ready " + _adReady);
-		console.log((new Date).getTime() + ": start function running");
-		time.eco = (new Date).getTime();
-		eco.run.impression();
-		eco.run.queue();
-		console.log((new Date).getTime() + ": start function completed");
+		// console.log((new Date).getTime()-eco.time.load + "ms: ad ready " + _adReady);
+		// console.log((new Date).getTime()-eco.time.load + "ms: start function running");
+		eco.time.eco = (new Date).getTime();
+		eco.impression.getAll();
+		eco.queue.runQueue();
+		// console.log((new Date).getTime()-eco.time.load + "ms: start function completed");
 	} else {
-		console.log((new Date).getTime() + ": ad ready " + _adReady);
-		console.log((new Date).getTime() + ": start function waiting");
+		// console.log((new Date).getTime()-eco.time.load + "ms: ad ready " + _adReady);
+		// console.log((new Date).getTime()-eco.time.load + "ms: start function waiting");
 		var readyStateCheckInterval = setInterval(function() {
-			console.log((new Date).getTime() + ": ad ready " + _adReady);
+			// console.log((new Date).getTime()-eco.time.load + "ms: ad ready " + _adReady);
 			if (_adReady) {
 				clearInterval(readyStateCheckInterval);
-				console.log((new Date).getTime() + ": start function running");
-				time.eco = (new Date).getTime();
-				eco.run.impression();
-				eco.run.queue();
-				console.log((new Date).getTime() + ": start function completed");
+				// console.log((new Date).getTime()-eco.time.load + "ms: start function running");
+				eco.time.eco = (new Date).getTime();
+				eco.impression.getAll();
+				eco.queue.runQueue();
+				// console.log((new Date).getTime()-eco.time.load + "ms: start function completed");
 			}
 		}, 500);
 	}
@@ -50,97 +50,114 @@ function ecoStart() {
 
 //eco.js
 (function(global) {
-	// Private methods
-	var _timestamp = function(url, timestamp) {
-		if (timestamp !== undefined) {
-			var a = url.replace(timestamp, function() {
-				return Math.round((new Date).getTime() / 1e3)
-			});
-			return (new Image).src = a;
-		} else {
-			var a = url;
-			return (new Image).src = a;
-		}
-	}
-	var _orientationCheck = function() {
-		if (window.innerWidth > window.innerHeight) {
-			return "landscape";
-		} else {
-			return "portrait";
-		}
-	}
-	// Public classes
-	var timeClass = function() {
-		this.load = (new Date).getTime();
-		this.view = function() {
-			return Math.floor(((new Date).getTime() - this.load) / 1e3);
-		}
-		this.action = function() {
-			return Math.floor(((new Date).getTime() - this.eco) / 1e3);
-		}
-		return this;
-	}
+	// Public ecoClass
 	var ecoClass = function() {
-		// Private vars
-		var param = {};
-		var impression = {};
-		var queue = [];
-		// Public methods
-		this.config = {
-			app: function(app) {
-				param.app = app;
-			},
-			advertiser: function(advertiser) {
-				param.advertiser = advertiser;
-			},
-			campaign: function(campaign) {
-				param.campaign = campaign;
-			},
-			issue: function(issue) {
-				param.issue = issue;
-			},
-			ga: function(ga) {
-				param.ga = ga;
-			},
-			gaClient: function(gaClient) {
-				param.gaClient = gaClient;
-			}
-		}
-		this.impression = {
-			phone: function(url) {
-				impression.phone = url;
-			},
-			tablet: function(url) {
-				impression.tablet = url;
-			},
-			timestamp: function(macro) {
-				impression.timestamp = macro;
-			}
-		}
-		this.open = function(url, tabletOptUrl) {
-			if (isMobile.phone) {
-				if (!_prodReady) {
-					window.location = url;
-				} else {
-					window.location = "internal-" + url;
-					ga('send', 'event', 'external', url, eco.run.config(), time.action());
-				}
-			} else if (tablet !== undefined) {
-				if (!_prodReady) {
-					window.location = tabletOptUrl;
-				} else {
-					window.location = "internal-" + tabletOptUrl;
-					ga('send', 'event', 'external', tabletOptUrl, eco.run.config(), time.action());
-				}
+		// Private
+		var _timestamp = function(url, timestamp) {
+			if (timestamp !== undefined) {
+				var a = url.replace(timestamp, function() {
+					return Math.round((new Date).getTime() / 1e3)
+				});
+				return (new Image).src = a;
 			} else {
-				if (!_prodReady) {
-					window.location = url;
-				} else {
-					window.location = "internal-" + url;
-					ga('send', 'event', 'external', url, eco.run.config(), time.action());
-				}
+				var a = url;
+				return (new Image).src = a;
 			}
 		}
+
+		var _orientationCheck = function() {
+			if (window.innerWidth > window.innerHeight) {
+				return "landscape";
+			} else {
+				return "portrait";
+			}
+		}
+		
+		// Public ecoClass methods
+		this.config = (function(){
+			var param = {};
+			return {
+				app: function(values) {
+					param.app = values;
+					return this;
+				},
+				advertiser: function(values) {
+					param.advertiser = values;
+					return this;
+				},
+				campaign: function(values) {
+					param.campaign = values;
+					return this;
+				},
+				issue: function(values) {
+					param.issue = values;
+					return this;
+				},
+				ga: function(values) {
+					param.ga = values;
+					return this;
+				},
+				gaClient: function(values) {
+					param.gaClient = values;
+					return this;
+				},
+				getProperty: function(property){
+					return param[property];
+				},
+				getCampaign: function(){
+					var a = param.app + "|" + param.advertiser + "|" + param.campaign + "|" + param.issue;
+					return a.toLowerCase();
+				},
+				getAll: function(){
+					console.log((new Date).getTime()-eco.time.load + "ms: configuration detail", param);
+				}
+			}
+		}());
+
+		this.impression = (function(){
+			var impression = {};
+			return {
+				phone: function(url) {
+					impression.phone = url;
+					return this;
+				},
+				tablet: function(url) {
+					impression.tablet = url;
+					return this;
+				},
+				timestamp: function(macro) {
+					impression.timestamp = macro;
+					return this;
+				},
+				getAll: function() {
+					if (impression.phone && impression.tablet !== undefined) {
+						if (impression.timestamp !== undefined) {
+							if (isMobile.phone) {
+								eco.sendGA('ad','view', eco.time.view(), 'nonInteraction');
+								return _timestamp(impression.phone, impression.timestamp);
+							} else {
+								eco.sendGA('ad','view', eco.time.view(), 'nonInteraction');
+								return _timestamp(impression.tablet, impression.timestamp);
+							}
+						} else {
+							if (isMobile.phone) {
+								eco.sendGA('ad','view', eco.time.view(), 'nonInteraction');
+								return _timestamp(impression.phone, impression.timestamp);
+							} else {
+								eco.sendGA('ad','view', eco.time.view(), 'nonInteraction');
+								return _timestamp(impression.tablet, impression.timestamp);
+							}
+						}
+					} else {
+						eco.sendGA('ad','view', eco.time.view(), 'nonInteraction');
+					}
+				},
+				check: function() {
+					console.log((new Date).getTime()-eco.time.load + "ms: impression detail",impression);
+				}				
+			}
+		}());
+
 		this.heatmap = function(element) {
 			document.getElementById(element).addEventListener('click', function(event) {
 				var x = event.pageX;
@@ -150,67 +167,77 @@ function ecoStart() {
 					y: y,
 					o: _orientationCheck(),
 				}
-				ga('send', 'event', 'heatmap', JSON.stringify(tracking), eco.run.config(), time.action(), {
-					nonInteraction: true
-				});
+				eco.sendGA('heatmap', JSON.stringify(tracking), eco.time.action(), 'nonInteraction')
 			});
 		}
+
+		this.open = function(url, tabletOptUrl) {
+			if (isMobile.phone) {
+				if (!_prodReady) {
+					window.location = url;
+				} else {
+					window.location = "internal-" + url;
+					eco.sendGA('external', url, eco.time.action());
+				}
+			} else if (tabletOptUrl !== undefined) {
+				if (!_prodReady) {
+					window.location = tabletOptUrl;
+				} else {
+					window.location = "internal-" + tabletOptUrl;
+					eco.sendGA('external', tabletOptUrl, eco.time.action());
+				}
+			} else {
+				if (!_prodReady) {
+					window.location = url;
+				} else {
+					window.location = "internal-" + url;
+					eco.sendGA('external', url, eco.time.action());
+				}
+			}
+		}
+
 		this.video = function(video, poster) {
 			var myVideo = document.getElementById(video);
-			var myDuration = function() {
-				return Math.floor(myVideo.duration);
-			}
-			var myTime = function() {
-				return Math.floor(myVideo.currentTime);
-			}
-			var myQuartile = function() {
-				return Math.floor(100 * (myTime() / myDuration()));
-			}
+			var myDuration = function() {return Math.floor(myVideo.duration);}
+			var myTime = function() {return Math.floor(myVideo.currentTime);}
+			var myQuartile = function() {return Math.floor(100 * (myTime() / myDuration()));}
 			var played = 0;
 			var poster = document.getElementById(poster);
 			myVideo.addEventListener("timeupdate", function() {
 				if (myQuartile() > 25) {
-					ga('send', 'event', 'video', 'firstQuartile: ' + myVideo.currentSrc, eco.run.config(), myQuartile(), {
-						nonInteraction: true
-					});
+					eco.sendGA('video', 'firstQuartile: ' + myVideo.currentSrc, myQuartile(), 'nonInteraction');
 					this.removeEventListener("timeupdate", arguments.callee);
 				}
 			});
 			myVideo.addEventListener("timeupdate", function() {
 				if (myQuartile() > 50) {
-					ga('send', 'event', 'video', 'secondQuartile: ' + myVideo.currentSrc, eco.run.config(), myQuartile(), {
-						nonInteraction: true
-					});
+					eco.sendGA('video', 'secondQuartile: ' + myVideo.currentSrc, myQuartile(), 'nonInteraction');
 					this.removeEventListener("timeupdate", arguments.callee);
 				}
 			});
 			myVideo.addEventListener("timeupdate", function() {
 				if (myQuartile() > 75) {
-					ga('send', 'event', 'video', 'thirdQuartile: ' + myVideo.currentSrc, eco.run.config(), myQuartile(), {
-						nonInteraction: true
-					});
+					eco.sendGA('video', 'thirdQuartile: ' + myVideo.currentSrc, myQuartile(), 'nonInteraction');
 					this.removeEventListener("timeupdate", arguments.callee);
 				}
 			});
 			myVideo.addEventListener("play", function() {
 				if (played == 0) {
-					ga('send', 'event', 'video', 'play: ' + myVideo.currentSrc, eco.run.config(), myQuartile());
-					// quartileEvents();
 					played++;
+					eco.sendGA('video', 'play: ' + myVideo.currentSrc, eco.time.action());
 				} else {
 					myVideo.play();
-					ga('send', 'event', 'video', 'resume: ' + myVideo.currentSrc, eco.run.config(), myQuartile());
+					eco.sendGA('video', 'resume: ' + myVideo.currentSrc, myQuartile());
 				}
 			}, false)
 			myVideo.addEventListener("pause", function() {
 				if (myQuartile() < 100) {
-					ga('send', 'event', 'video', 'pause: ' + myVideo.currentSrc, eco.run.config(), myQuartile());
+					eco.sendGA('video', 'pause: ' + myVideo.currentSrc, myQuartile());
 				}
 			}, false)
 			myVideo.addEventListener("ended", function() {
-				ga('send', 'event', 'video', 'ended: ' + myVideo.currentSrc, eco.run.config(), myQuartile(), {
-					nonInteraction: true
-				});
+				played = 0;
+				eco.sendGA('video', 'ended: ' + myVideo.currentSrc, myQuartile(), 'nonInteraction');
 				if (document.exitFullscreen) {
 					document.exitFullscreen();
 				} else if (document.msExitFullscreen) {
@@ -220,14 +247,13 @@ function ecoStart() {
 				} else if (document.webkitExitFullscreen) {
 					document.webkitExitFullscreen();
 				}
-				played = 0;
 			}, false)
 			document.addEventListener('webkitfullscreenchange' || 'mozfullscreenchange' || 'fullscreenchange' || 'MSFullscreenChange', function(e) {
 				var isInFullScreen = !(!document.fullscreenElement && !document.msFullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement);
 				if (isInFullScreen) {
-					console.log("Full screen YES");
+					// console.log("Full screen YES");
 				} else {
-					console.log("Full screen NO");
+					// console.log("Full screen NO");
 					myVideo.pause();
 				}
 			});
@@ -237,145 +263,121 @@ function ecoStart() {
 					myVideo.play();
 				}, false);
 			}
+			return this;
 		}
+
 		this.event = function(action, optUrl) {
 			if (url && impression.timestamp !== undefined) {
 				_timestamp(optUrl, impression.timestamp);
-				ga('send', 'event', 'custom', action, eco.run.config(), time.action());
-			} else if (url !== undefined) {
+				eco.sendGA('custom', action, eco.time.action());
+			} else if (optUrl !== undefined) {
 				_timestamp(optUrl);
-				ga('send', 'event', 'custom', action, eco.run.config(), time.action());
+				eco.sendGA('custom', action, eco.time.action());
 			} else {
-				ga('send', 'event', 'custom', action, eco.run.config(), time.action());
+				eco.sendGA('custom', action, eco.time.action());
 			}
+			return this;
 		}
-		this.queue = function(fn) {
-			queue.push(fn);
-		}
-		this.run = {
-			config: function(property) {
-				if (property !== undefined) {
-					return param[property];
-				} else {
-					var a = param.app + "|" + param.advertiser + "|" + param.campaign + "|" + param.issue;
-					return a.toLowerCase();
-				}
-			},
 
-			impression: function() {
-				if (impression.phone && impression.tablet !== undefined) {
-					if (impression.timestamp !== undefined) {
-						if (isMobile.phone) {
-							_timestamp(impression.phone, impression.timestamp);
-							ga('send', 'event', 'ad', 'view', eco.run.config(), time.view(), {
-								nonInteraction: true
-							});
-						} else {
-							_timestamp(impression.tablet, impression.timestamp);
-							ga('send', 'event', 'ad', 'view', eco.run.config(), time.view(), {
-								nonInteraction: true
-							});
-						}
-					} else {
-						if (isMobile.phone) {
-							_timestamp(impression.phone, impression.timestamp);
-							ga('send', 'event', 'ad', 'view', eco.run.config(), time.view(), {
-								nonInteraction: true
-							});
-						} else {
-							_timestamp(impression.tablet, impression.timestamp);
-							ga('send', 'event', 'ad', 'view', eco.run.config(), time.view(), {
-								nonInteraction: true
-							});
-						}
-					}
-				} else {
-					ga('send', 'event', 'ad', 'view', eco.run.config(), time.view(), {
-						nonInteraction: true
-					});
-				}
-			},
-
-			queue: function() {
-				if (_debugMode) {
+		this.queue = (function(){
+			var queue = [];
+			return {
+				addTask: function(fn) {
+					queue.push(fn);
+					return this;
+				},
+				getQueue: function() {
 					queue.forEach(function(item, index) {
-						console.log((new Date).getTime() + ": running task " + index);
+						console.log((new Date).getTime()-eco.time.load + "ms: task " + index+'\n', item);
+						return item, index;
 					})
-				}
-				while (queue.length > 0) {
-					(queue.shift())();
-				}
-			},
-
-			ad: function(debug) {
-				if (debug !== undefined) {
-					console.log((new Date).getTime() + ": debug mode on");
-					_debugMode = true;
-					var readyStateCheckInterval = setInterval(function() {
-						if (_docReady) {
-							clearInterval(readyStateCheckInterval);
-							_adReady = true;
-							eco.check.config();
-							eco.check.impression();
-							eco.check.queue();
-							ecoStart();
-						}
-					}, 500);
-				} else {
-					_prodReady = true;
-					var readyStateCheckInterval = setInterval(function() {
-						if (_docReady) {
-							clearInterval(readyStateCheckInterval);
-							_adReady = true;
-						}
-					}, 500);
+				},
+				runQueue: function() {
+					if (_debugMode) {
+						queue.forEach(function(item, index) {
+							// console.log((new Date).getTime()-eco.time.load + "ms: running task " + index);
+						})
+					}
+					while (queue.length > 0) {
+						(queue.shift())();
+					}
 				}
 			}
-		}
-		this.check = {
-			config: function(property) {
-				if (property !== undefined) {
-					console.log((new Date).getTime() + ": configuration property");
-					console.log(param[property]);
-					return param[property];
-				} else {
-					console.log((new Date).getTime() + ": configuration detail");
-					console.log(param);
-					return param;
-				}
-			},
+		}());
 
-			impression: function() {
-				console.log((new Date).getTime() + ": impression detail");
-				console.log(impression);
+		this.ad = {
+			debug: function() {
+				_debugMode = true;
+				console.log((new Date).getTime()-eco.time.load + "ms: debug mode on");
+				eco.config.getAll();
+				eco.impression.check();
+				eco.queue.getQueue();
+				var readyStateCheckInterval = setInterval(function() {
+					console.log((new Date).getTime()-eco.time.load + "ms: ecoStart waiting");
+					if (_docReady) {
+						clearInterval(readyStateCheckInterval);
+						_adReady = true;
+						ecoStart();
+						console.log((new Date).getTime()-eco.time.load + "ms: ecoStart complete");
+					}
+				}, 500);
 			},
-
-			queue: function() {
-				console.log((new Date).getTime() + ": task queue detail");
-				queue.forEach(function(item, index) {
-					console.log((new Date).getTime() + ": task " + index, item);
-				})
-			},
-
-			ad: function() {
-				return _adReady;
+			run: function() {
+				_prodReady = true;
+				var readyStateCheckInterval = setInterval(function() {
+					if (_docReady) {
+						clearInterval(readyStateCheckInterval);
+						_adReady = true;
+					}
+				}, 500);
 			}
 		}
-		return this;
+
+		this.time = {
+			view: function() {
+				return Math.floor(((new Date).getTime() - this.load) / 1e3);
+			},
+
+			action: function() {
+				return Math.floor(((new Date).getTime() - this.eco) / 1e3);
+			}
+		}
+
+		this.sendGA = function(category, action, value, nonInteraction) {
+			if (nonInteraction !== undefined) {
+				if (eco.config.getProperty('gaClient') !== undefined) {
+					ga('send', 'event', category, action, eco.config.getCampaign(), value, {
+							nonInteraction: true
+						});
+					ga('clientTracker.send', 'event', category, action, eco.config.getCampaign(), value, {
+							nonInteraction: true
+						});
+				} else {
+					ga('send', 'event', category, action, eco.config.getCampaign(), value, {
+							nonInteraction: true
+						});	
+				}				
+			} else {
+				if (eco.config.getProperty('gaClient') !== undefined) {
+					ga('send', 'event', category, action, eco.config.getCampaign(), value);
+					ga('clientTracker.send', 'event', category, action, eco.config.getCampaign(), value);
+				} else {
+					ga('send', 'event', category, action, eco.config.getCampaign(), value);	
+				}	
+			}
+		}
 	}
-	// Instantiate public classes
-	var instantiateEco = function() {
+	// Instantiate ecoClass
+	var instantiate = function() {
 		var ECO = new ecoClass();
 		ECO.class = ecoClass;
 		return ECO;
 	}
-	var instantiateTime = function() {
-		var TIME = new timeClass();
-		TIME.class = timeClass;
-		return TIME;
-	}
-	global.time = instantiateTime();
-	global.eco = instantiateEco();
+
+	global.eco = instantiate();
+
+	// Set new load time
+	eco.time.load = (new Date).getTime();
 }(this));
 // End eco.js
 
@@ -383,54 +385,49 @@ document.onreadystatechange = function() {
 	switch (document.readyState) {
 		case "interactive":
 			// The document has finished loading. We can now access the DOM elements.
-			console.log((new Date).getTime() + ": document interactive");
+			// console.log((new Date).getTime()-eco.time.load + "ms: document interactive");
 			if (_prodReady !== false) {
 				eco.config.ga("UA-69628544-11");
 			} else {
 				eco.config.ga("UA-69628544-10");
 			}
-			ga('create', eco.run.config("ga"), 'auto');
+			ga('create', eco.config.getProperty('ga'), 'auto');
+			if (_debugMode !== false) {
+				ga(function(tracker){
+					// console.log((new Date).getTime()-eco.time.load + "ms: " + (tracker.get('trackingId'))+ " ga created");
+				})
+			}
 			ga('set', 'checkProtocolTask', null);
 			ga('set', 'checkStorageTask', null);
 			ga('send', 'screenview', {
-				'appName': eco.run.config("app"),
-				'screenName': eco.run.config()
+				'appName': eco.config.getProperty('app'),
+				'screenName': eco.config.getCampaign()
 			});
-			ga('send', 'event', 'ad', 'load', eco.run.config(), {
-				nonInteraction: true
-			});
-			if (_debugMode !== false) {
-				console.log((new Date).getTime() + ": " + eco.run.config("ga") + " ga sent");
-			}
-			if (eco.run.config("gaClient") !== undefined) {
-				ga('create', eco.run.config("gaClient"), 'auto', 'clientTracker');
+			if (eco.config.getProperty('gaClient') !== undefined) {
+				ga('create', eco.config.getProperty('gaClient'), 'auto', 'clientTracker');
+				if (_debugMode !== false) {
+					ga(function(clientTracker){
+						// console.log((new Date).getTime()-eco.time.load + "ms: " + (clientTracker.get('trackingId'))+ " gaClient created");
+					})
+				}
 				ga('clientTracker.set', 'checkProtocolTask', null);
 				ga('clientTracker.set', 'checkStorageTask', null);
 				ga('clientTracker.send', 'pageview');
-				ga('clientTracker.send', 'event', 'ad', 'load', eco.run.config(), {
-					nonInteraction: true
-				});
-				if (_debugMode !== false) {
-					console.log((new Date).getTime() + ": " + eco.run.config("gaClient") + " gaClient sent");
-				}
 			}
+			eco.sendGA('ad', 'load', '0', 'nonInteraction');
 			if (window.onpagehide || window.onpagehide === null) {
 				window.addEventListener('pagehide', function() {
-					ga('send', 'event', 'ad', 'hide', eco.run.config(), time.action(), {
-						nonInteraction: true
-					});
+					eco.sendGA('ad', 'hide', eco.time.action(), 'nonInteraction');
 				}, false);
 			} else {
 				window.addEventListener('unload', function() {
-					ga('send', 'event', 'ad', 'hide', eco.run.config(), time.action(), {
-						nonInteraction: true
-					});
+					eco.sendGA('ad', 'hide', eco.time.action(), 'nonInteraction');
 				}, false);
 			}
 			break;
 		case "complete":
 			// The page is fully loaded.
-			console.log((new Date).getTime() + ": document complete");
+			// console.log((new Date).getTime()-eco.time.load + "ms: document complete");
 			_docReady = true;
 			break;
 	}

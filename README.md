@@ -43,15 +43,15 @@ Include the eco.js script in the HEAD of your index.html :
 * `eco.impression.timestamp('string');`
  configure the 3rd party impression cache buster macro
 
-### eco.open
-
-* `eco.open('url','tabletOptUrl');`
- Open a url with the in-app browser. Optional url can be applied to track url opened with tablets.
-
 ### eco.heatmap
 
 * `eco.heatmap('element');`
  Add interaction heatmap to the html object ID that wraps your content.
+
+### eco.open
+
+* `eco.open('url','tabletOptUrl');`
+ Open a url with the in-app browser. Optional url can be applied to track url opened with tablets.
 
 ### eco.video
 
@@ -65,15 +65,15 @@ Include the eco.js script in the HEAD of your index.html :
 
 ### eco.queue
 
-* `eco.queue(fn);`
+* `eco.queue.addTask(fn);`
  Quene custom functions into the task queue.
 
-### eco.run
+### eco.ad
 
-* `eco.run.ad('debugMode');`
- Run the ad in debug mode for browser testing.
-* `eco.run.ad();`
- Run the ad in production mode. Will not work in browser.
+* `eco.ad.debug();`
+ Run the ad in debug mode for browser testing. Removed for production.
+* `eco.ad.run();`
+ Run the ad in production mode (will not work in browser). Set the ad to run when supplying creative to The Economist production team.
 
 ## Usage Example
 
@@ -91,35 +91,40 @@ index.html :
 		<a id="a" onclick=eco.open('http://google.com/phoneUrl','http://google.com/tabletUrl');>
 			Link to open up webview window
 		</a>
-		<video id="video" webkit-playsinline controls preload="none">
+		<video id="video1" webkit-playsinline controls preload="none">
+			<source src="http://html5demos.com/assets/dizzy.mp4" type="video/mp4" />
+		</video>
+		<video id="video2" webkit-playsinline controls preload="none">
 			<source src="http://html5demos.com/assets/dizzy.mp4" type="video/mp4" />
 		</video>
 	</div>
 	<script type="text/javascript">
 	// 1. Create any custom code required for your ad to work here
-	function task() {
-		console.log((new Date).getTime()+": custom task running");
+	function task1() {
+		console.log((new Date).getTime()+": task 1 running");
+	}
+	
+	function task2() {
+		console.log((new Date).getTime()+": task 2 running");
 	}
 
 	// 2. Configure the ad with important campaign details
-	eco.config.app('economist');
-	eco.config.advertiser('advertiser');
-	eco.config.campaign('rich media');
-	eco.config.issue('issue');
-	eco.config.gaClient('UA-XXXXXXXX-X');
+	eco.config.app('economist').advertiser('advertiser').campaign('rich media').issue('issue').gaClient('UA-XXXXXXXX-X');
 
 	// 3. Add impression tracking to the or video and heatmap to the ad
 	eco.impression.phone('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=phone&ord=[timestamp]');
 	eco.impression.tablet('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=tablet&ord=[timestamp]');
 	eco.impression.timestamp('[timestamp]');
 	eco.heatmap('wrapper');
-	eco.video('video');
+	eco.video('video1').video('video2');
 
 	// 4. Add your custom tasks to the task queue
-	eco.queue(task);
+	eco.queue.addTask(task1).addTask(task2);
 
 	// 5. Run your ad
-	eco.run.ad('debugMode');
+	eco.ad.debug();
+	// eco.ad.run();
+
 	</script>
 </body>
 </html>
