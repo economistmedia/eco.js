@@ -1,5 +1,5 @@
 /**
- * eco.js v0.1.0
+ * eco.js v0.1.1
  *
  * A simple library to help build compatabile interactive ads for The Economist apps.
  *
