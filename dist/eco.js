@@ -267,7 +267,7 @@ function ecoStart() {
 		}
 
 		this.event = function(action, optUrl) {
-			if (url && impression.timestamp !== undefined) {
+			if (optUrl && impression.timestamp !== undefined) {
 				_timestamp(optUrl, impression.timestamp);
 				eco.sendGA('custom', action, eco.time.action());
 			} else if (optUrl !== undefined) {
