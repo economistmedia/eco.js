@@ -415,13 +415,31 @@ document.onreadystatechange = function() {
 				ga('clientTracker.send', 'pageview');
 			}
 			eco.sendGA('ad', 'load', '0', 'nonInteraction');
-			if (window.onpagehide || window.onpagehide === null) {
+			if ('onpagehide' in window) {
 				window.addEventListener('pagehide', function() {
-					eco.sendGA('ad', 'hide', eco.time.action(), 'nonInteraction');
+					ga('send', 'event', 'ad', 'hide', eco.config.getCampaign(), eco.time.action(), {
+						useBeacon: true,
+						nonInteraction: true
+					});
+					if (eco.config.getProperty('gaClient') !== undefined) {
+						ga('clientTracker.send', 'event', 'ad', 'hide', eco.config.getCampaign(), eco.time.action(), {
+							useBeacon: true,
+							nonInteraction: true
+						});						
+					}
 				}, false);
 			} else {
 				window.addEventListener('unload', function() {
-					eco.sendGA('ad', 'hide', eco.time.action(), 'nonInteraction');
+					ga('send', 'event', 'ad', 'hide', eco.config.getCampaign(), eco.time.action(), {
+						useBeacon: true,
+						nonInteraction: true
+					});
+					if (eco.config.getProperty('gaClient') !== undefined) {
+						ga('clientTracker.send', 'event', 'ad', 'hide', eco.config.getCampaign(), eco.time.action(), {
+							useBeacon: true,
+							nonInteraction: true
+						});						
+					}
 				}, false);
 			}
 			break;
