@@ -62,6 +62,39 @@
 		function output(){
 			console.log("output");
 		}
+		
+		var onlongtouch; 
+		var timer, lockTimer;
+		var touchduration = 800; //length of time we want the user to touch before we do something
+
+		function touchstart(e) {
+			e.preventDefault();
+			if(lockTimer){
+				return;
+			}
+		    timer = setTimeout(onlongtouch, touchduration); 
+			lockTimer = true;
+		}
+
+		function touchend() {
+		    //stops short touches from firing the event
+		    if (timer){
+		        clearTimeout(timer); // clearTimeout, not cleartimeout..
+				lockTimer = false;
+				document.getElementById('wrapper').style.zoom = "1"; 
+				
+			}
+		}
+
+		onlongtouch = function() { 
+			document.getElementById('wrapper').style.zoom = "2"; 
+		};
+
+		document.addEventListener("DOMContentLoaded", function(event) { 
+		  window.addEventListener("touchstart", touchstart, false);
+		  window.addEventListener("touchend", touchend, false);
+		});
+			
 		// 2. Configure the ad with important campaign details
 		eco.config.gaClient('UA-XXXXXXXX-X').app('economist').advertiser('advertiser').campaign('rich media').issue('issue');
 	

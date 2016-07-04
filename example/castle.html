@@ -83,10 +83,7 @@
 
 		.load-gate { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: #fff; font-family: sans-serif; text-transform: uppercase; font-size: 10px; letter-spacing: 0.2em; padding: 20px; }
 		</style>
-		<script src="js/eco.js" type="text/javascript" charset="utf-8"></script>
-		<script>
-		// ecoStart();
-		</script>
+		<script src="js/eco.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 		<!-- Remove line for PRODUCTION -->
@@ -222,14 +219,14 @@
 		    }});
 		};
 
-		var init = function() {
+		function init() {
 		    TweenLite.to($('.load-gate'), 0.5, {opacity: 0, onComplete: function() {
 		        $('.load-gate').remove();
 		    }});
 		    requestAnimationFrame(draw);
 		    cloudIntro();
 		};
-
+		
 		TweenMax.to($('.cloud-bg'), 40, {x: WIDTH * 2, y: 200 * scale, ease: Linear.easeNone, repeat: -1, force3D: true, onRepeat: function() {
 		    TweenLite.set(this.target[0], {y: Math.random() * 200 - 100, rotationZ: Math.round(Math.random() * 60) - 30, scaleX: Math.random() > 0.5 ? 1 : -1});
 		}});

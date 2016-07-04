@@ -129,6 +129,9 @@ function ecoStart() {
 					impression.timestamp = macro;
 					return this;
 				},
+				timestampValue: function() {
+					return impression.timestamp;
+				},
 				getAll: function() {
 					if (impression.phone && impression.tablet !== undefined) {
 						if (impression.timestamp !== undefined) {
@@ -175,6 +178,7 @@ function ecoStart() {
 			if (isMobile.phone) {
 				if (!_prodReady) {
 					window.location = url;
+					eco.sendGA('external', url, eco.time.action());
 				} else {
 					window.location = "internal-" + url;
 					eco.sendGA('external', url, eco.time.action());
@@ -182,6 +186,7 @@ function ecoStart() {
 			} else if (tabletOptUrl !== undefined) {
 				if (!_prodReady) {
 					window.location = tabletOptUrl;
+					eco.sendGA('external', tabletOptUrl, eco.time.action());
 				} else {
 					window.location = "internal-" + tabletOptUrl;
 					eco.sendGA('external', tabletOptUrl, eco.time.action());
@@ -189,6 +194,7 @@ function ecoStart() {
 			} else {
 				if (!_prodReady) {
 					window.location = url;
+					eco.sendGA('external', url, eco.time.action());
 				} else {
 					window.location = "internal-" + url;
 					eco.sendGA('external', url, eco.time.action());
@@ -267,8 +273,8 @@ function ecoStart() {
 		}
 
 		this.event = function(action, optUrl) {
-			if (optUrl && impression.timestamp !== undefined) {
-				_timestamp(optUrl, impression.timestamp);
+			if (optUrl && eco.impression.timestampValue() !== undefined) {
+				_timestamp(optUrl, eco.impression.timestampValue());
 				eco.sendGA('custom', action, eco.time.action());
 			} else if (optUrl !== undefined) {
 				_timestamp(optUrl);
@@ -359,10 +365,16 @@ function ecoStart() {
 				}				
 			} else {
 				if (eco.config.getProperty('gaClient') !== undefined) {
-					ga('send', 'event', category, action, eco.config.getCampaign(), value);
-					ga('clientTracker.send', 'event', category, action, eco.config.getCampaign(), value);
+					ga('send', 'event', category, action, eco.config.getCampaign(), value, {
+							transport: 'beacon'
+					});
+					ga('clientTracker.send', 'event', category, action, eco.config.getCampaign(), value, {
+							transport: 'beacon'
+					});
 				} else {
-					ga('send', 'event', category, action, eco.config.getCampaign(), value);	
+					ga('send', 'event', category, action, eco.config.getCampaign(), value, {
+							transport: 'beacon'
+					});	
 				}	
 			}
 		}
@@ -418,12 +430,12 @@ document.onreadystatechange = function() {
 			if ('onpagehide' in window) {
 				window.addEventListener('pagehide', function() {
 					ga('send', 'event', 'ad', 'hide', eco.config.getCampaign(), eco.time.action(), {
-						useBeacon: true,
+						transport: 'beacon',
 						nonInteraction: true
 					});
 					if (eco.config.getProperty('gaClient') !== undefined) {
 						ga('clientTracker.send', 'event', 'ad', 'hide', eco.config.getCampaign(), eco.time.action(), {
-							useBeacon: true,
+							transport: 'beacon',
 							nonInteraction: true
 						});						
 					}
@@ -431,12 +443,12 @@ document.onreadystatechange = function() {
 			} else {
 				window.addEventListener('unload', function() {
 					ga('send', 'event', 'ad', 'hide', eco.config.getCampaign(), eco.time.action(), {
-						useBeacon: true,
+						transport: 'beacon',
 						nonInteraction: true
 					});
 					if (eco.config.getProperty('gaClient') !== undefined) {
 						ga('clientTracker.send', 'event', 'ad', 'hide', eco.config.getCampaign(), eco.time.action(), {
-							useBeacon: true,
+							transport: 'beacon',
 							nonInteraction: true
 						});						
 					}
