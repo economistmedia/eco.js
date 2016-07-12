@@ -83,7 +83,7 @@
 
 		.load-gate { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: #fff; font-family: sans-serif; text-transform: uppercase; font-size: 10px; letter-spacing: 0.2em; padding: 20px; }
 		</style>
-		<script src="js/eco.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../dist/eco.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 		<!-- Remove line for PRODUCTION -->
@@ -575,7 +575,6 @@
 		eco.impression.phone('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=phone&ord=[timestamp]');
 		eco.impression.tablet('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=tablet&ord=[timestamp]');
 		eco.impression.timestamp('[timestamp]');
-		eco.heatmap('wrapper');
 
 		// 4. Add your custom tasks to the task queue
 		eco.queue.addTask(init);

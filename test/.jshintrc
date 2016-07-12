@@ -1,0 +1,13 @@
+{
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "latedef": false,
+  "noarg": true,
+  "undef": true,
+  "unused": true,
+  "globals": {
+    "eco": true,
+	"isMobile": true
+  }
+}
