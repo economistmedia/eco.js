@@ -299,7 +299,7 @@ var _debugMode = false;
 				}
 			});
 			//Triggers available to play video such as a thumbnail or cover image
-			if (poster !== undefined) {
+			if (poster !== null) {
 				poster.addEventListener('click', function() {
 					myVideo.play();
 				}, false);

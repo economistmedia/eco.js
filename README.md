@@ -24,49 +24,49 @@ Include the eco.js script in the HEAD of your index.html :
 ### eco.config
 
 * `eco.config.app('string');`
- configure the name of the app
+ STRING. configure the name of the app
 * `eco.config.advertiser('string');`
- configure the name of the advertiser
+ STRING. configure the name of the advertiser
 * `eco.config.campaign('string');`
- configure the name of the campaign
+ STRING. configure the name of the campaign
 * `eco.config.issue('string');`
- configure the date of the issue
+ STRING. configure the date of the issue
 * `eco.config.gaClient('UA-XXXXXXXX-X');`
- configure the client GA property ID
+ STRING. configure the client GA property ID
 
 ### eco.impression
 
 * `eco.impression.phone('url');`
- configure the 3rd party impression url for phone
+ STRING. configure the 3rd party impression url for phone
 * `eco.impression.tablet('url');`
- configure the 3rd party impression url for tablet
+ STRING. configure the 3rd party impression url for tablet
 * `eco.impression.timestamp('string');`
- configure the 3rd party impression cache buster macro
+ STRING. configure the 3rd party impression cache buster macro
 
 ### eco.heatmap
 
-* `eco.heatmap('element');`
- Add interaction heatmap to the html object ID that wraps your content.
+* `eco.heatmap();`
+ Add interaction heatmap to the creative by recording all x, y cooridnates of clicks on document object.
 
 ### eco.open
 
 * `eco.open('url','tabletOptUrl');`
- Open a url with the in-app browser. Optional url can be applied to track url opened with tablets.
+ STRING. Open a url with the in-app browser. Optional url can be applied to track url opened with tablets.
 
 ### eco.video
 
 * `eco.video('id');`
- Add video tracking using the ID of the video object. Note that videos embeded via iframes are not supported.
+ STRING. Add video tracking using the ID of the video object. Note that videos embeded via iframes are not supported. 
 
 ### eco.event
 
 * `eco.event('action','optUrl');`
- Track event action with an optional impression url.
+ STRING. Track event action with an optional impression url.
 
 ### eco.queue
 
 * `eco.queue.addTask(fn);`
- Quene custom functions into the task queue.
+ FUNCTION. Quene custom functions into the task queue.
 
 ### eco.ad
 
@@ -84,7 +84,7 @@ index.html :
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
-	<script src="js/eco.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/eco.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -101,11 +101,11 @@ index.html :
 	<script type="text/javascript">
 	// 1. Create any custom code required for your ad to work here
 	function task1() {
-		console.log((new Date).getTime()+": task 1 running");
+		console.log((new Date()).getTime()+": task 1 running");
 	}
 	
 	function task2() {
-		console.log((new Date).getTime()+": task 2 running");
+		console.log((new Date()).getTime()+": task 2 running");
 	}
 
 	// 2. Configure the ad with important campaign details
@@ -115,7 +115,7 @@ index.html :
 	eco.impression.phone('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=phone&ord=[timestamp]');
 	eco.impression.tablet('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=tablet&ord=[timestamp]');
 	eco.impression.timestamp('[timestamp]');
-	eco.heatmap('wrapper');
+	eco.heatmap();
 	eco.video('video1').video('video2');
 
 	// 4. Add your custom tasks to the task queue
