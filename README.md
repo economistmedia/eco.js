@@ -7,16 +7,15 @@ A simple JS library to simplify the tracking setup and initialization of Rich Me
  - support phone and tablet impression and click tracking
  - support 3rd party tracking with cachebusting
  - support html5 video reporting with quartile and completion rates (iframe video embeds not supported)
- - support interaction heatmap
+ - support automatic interaction heatmap
  - support google analytics custom events
  - support queueing of tasks before initialization
- - support console output of debug information
 
 ## Install
 
 Include the eco.js script in the HEAD of your index.html :
 ```
-	<script src="js/eco.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/eco.min.js" type="text/javascript" charset="utf-8"></script>
 ```
 
 ## Global Functions
@@ -31,8 +30,6 @@ Include the eco.js script in the HEAD of your index.html :
  STRING. configure the name of the campaign
 * `eco.config.issue('string');`
  STRING. configure the date of the issue
-* `eco.config.gaClient('UA-XXXXXXXX-X');`
- STRING. configure the client GA property ID
 
 ### eco.impression
 
@@ -42,11 +39,6 @@ Include the eco.js script in the HEAD of your index.html :
  STRING. configure the 3rd party impression url for tablet
 * `eco.impression.timestamp('string');`
  STRING. configure the 3rd party impression cache buster macro
-
-### eco.heatmap
-
-* `eco.heatmap();`
- Add interaction heatmap to the creative by recording all x, y cooridnates of clicks on document object.
 
 ### eco.open
 
@@ -109,13 +101,12 @@ index.html :
 	}
 
 	// 2. Configure the ad with important campaign details
-	eco.config.app('economist').advertiser('advertiser').campaign('rich media').issue('issue').gaClient('UA-XXXXXXXX-X');
+	eco.config.app('economist').advertiser('advertiser').campaign('rich media').issue('issue');
 
 	// 3. Add impression tracking to the or video and heatmap to the ad
 	eco.impression.phone('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=phone&ord=[timestamp]');
 	eco.impression.tablet('https://upload.wikimedia.org/wikipedia/commons/2/23/1x1.GIF?device=tablet&ord=[timestamp]');
 	eco.impression.timestamp('[timestamp]');
-	eco.heatmap();
 	eco.video('video1').video('video2');
 
 	// 4. Add your custom tasks to the task queue

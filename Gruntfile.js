@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 	    // Make sure there are no obvious mistakes
 	    jshint: {
 	      options: {
-	        // jshintrc: '.jshintrc',
+	        jshintrc: '.jshintrc',
 	        reporter: require('jshint-stylish')
 	      },
 	      all: {
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
 	      },
 	      test: {
 	        options: {
-	          // jshintrc: 'test/.jshintrc'
+	          jshintrc: 'test/.jshintrc'
 	        },
 	        src: ['test/spec/{,*/}*.js']
 	      }
@@ -62,6 +62,8 @@ module.exports = function(grunt) {
     // --------------------------
 
     // Observe changes, concatenate, minify and validate files
-    grunt.registerTask( "default", ["uglify", "notify:js" ]);
+    grunt.registerTask( "default", ["jshint", "uglify", "notify:js" ]);
+    grunt.registerTask( "test", ["jshint", "uglify", "notify:js" ]);
+    grunt.registerTask( "build", ["uglify", "notify:js" ]);
 
 };
