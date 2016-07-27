@@ -36,6 +36,7 @@ function ecoStart() {
 		eco.heatmap();
 		eco.impression.getAll();
 		eco.queue.runQueue();
+		// eco.links();
 		// console.log((new Date).getTime()-eco.time.load + 'ms: start function completed");
 	} else {
 		// console.log((new Date).getTime()-eco.time.load + 'ms: start function waiting");
@@ -47,6 +48,7 @@ function ecoStart() {
 				eco.heatmap();
 				eco.impression.getAll();
 				eco.queue.runQueue();
+				// eco.links();
 				// console.log((new Date).getTime()-eco.time.load + 'ms: start function completed");
 			}
 		}, 500);
@@ -188,6 +190,20 @@ function ecoStart() {
 			}
 			document.addEventListener('click', heatmap, false);
 		};
+		
+		// this.links = function() {
+		// 	function output(item,index) {
+		// 		if(!_debugMode) {
+		// 			item.href = 'internal-'+item.href;
+		// 		} else {
+		// 			console.log('link '+index, item.href);
+		// 		}
+		// 		item.addEventListener('click',function(){
+		// 			eco.sendGA('external', item.href, eco.time.action());
+		// 		});
+		// 	}
+		// 	[].forEach.call(document.getElementsByTagName('a'),output);
+		// };
 
 		this.open = function(url, tabletOptUrl) {
 			if (isMobile.phone) {
