@@ -244,27 +244,30 @@ function ecoStart() {
 			var myQuartile = function() {
 				return Math.floor(100 * (myTime() / myDuration()));
 			};
+			var myFilename = function() {
+				return myVideo.currentSrc.split("/").pop();
+			};
 			var played = false;
 
 			function play() {
 				if (played === false) {
 					played = true;
-					eco.sendGA('video', 'play: ' + myVideo.currentSrc, eco.time.action());
+					eco.sendGA('video', 'play: ' + myFilename(), eco.time.action());
 				} else {
 					myVideo.play();
-					eco.sendGA('video', 'resume: ' + myVideo.currentSrc, myQuartile());
+					eco.sendGA('video', 'resume: ' + myFilename(), myQuartile());
 				}
 			}
 
 			function pause() {
 				if (myQuartile() < 100) {
-					eco.sendGA('video', 'pause: ' + myVideo.currentSrc, myQuartile());
+					eco.sendGA('video', 'pause: ' + myFilename(), myQuartile());
 				}
 			}
 
 			function ended() {
 				played = false;
-				eco.sendGA('video', 'ended: ' + myVideo.currentSrc, myQuartile(), 'nonInteraction');
+				eco.sendGA('video', 'ended: ' + myFilename(), myQuartile(), 'nonInteraction');
 				if (document.exitFullscreen) {
 					document.exitFullscreen();
 				} else if (document.msExitFullscreen) {
@@ -278,21 +281,21 @@ function ecoStart() {
 
 			function firstQuartile() {
 				if (myQuartile() > 25) {
-					eco.sendGA('video', 'firstQuartile: ' + myVideo.currentSrc, myQuartile(), 'nonInteraction');
+					eco.sendGA('video', 'firstQuartile: ' + myFilename(), myQuartile(), 'nonInteraction');
 					myVideo.removeEventListener('timeupdate', firstQuartile);
 				}
 			}
 
 			function secondQuartile() {
 				if (myQuartile() > 50) {
-					eco.sendGA('video', 'secondQuartile: ' + myVideo.currentSrc, myQuartile(), 'nonInteraction');
+					eco.sendGA('video', 'secondQuartile: ' + myFilename(), myQuartile(), 'nonInteraction');
 					myVideo.removeEventListener('timeupdate', secondQuartile);
 				}
 			}
 
 			function thirdQuartile() {
 				if (myQuartile() > 75) {
-					eco.sendGA('video', 'thirdQuartile: ' + myVideo.currentSrc, myQuartile(), 'nonInteraction');
+					eco.sendGA('video', 'thirdQuartile: ' + myFilename(), myQuartile(), 'nonInteraction');
 					myVideo.removeEventListener('timeupdate', thirdQuartile);
 				}
 			}
