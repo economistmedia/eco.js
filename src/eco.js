@@ -186,25 +186,32 @@ function ecoStart() {
 					y: y,
 					o: _orientationCheck(),
 				};
+				// console.log(tracking);
 				eco.sendGA('heatmap', JSON.stringify(tracking), eco.time.action(), 'nonInteraction');
 			}
 			document.addEventListener('click', heatmap, false);
+			var vector = {
+				x1: null,
+				y1: null,
+				x2: null,
+				y2: null,
+				o: _orientationCheck()
+			};
+
+			if (isMobile.apple || isMobile.android) {
+				document.addEventListener('touchstart', function(e){
+					vector.x1 = e.touches[0].clientX;
+					vector.y1 = e.touches[0].clientY;
+				});
+				document.addEventListener('touchend', function(e){
+					vector.x2 = e.changedTouches[0].clientX;
+					vector.y2 = e.changedTouches[0].clientY;
+					// console.log(vector);
+					eco.sendGA('swipe', JSON.stringify(vector), eco.time.action(), 'nonInteraction');
+				});
+			}
 		};
 		
-		// this.links = function() {
-		// 	function output(item,index) {
-		// 		if(!_debugMode) {
-		// 			item.href = 'internal-'+item.href;
-		// 		} else {
-		// 			console.log('link '+index, item.href);
-		// 		}
-		// 		item.addEventListener('click',function(){
-		// 			eco.sendGA('external', item.href, eco.time.action());
-		// 		});
-		// 	}
-		// 	[].forEach.call(document.getElementsByTagName('a'),output);
-		// };
-
 		this.open = function(url, tabletOptUrl) {
 			if (isMobile.phone) {
 				if (!_prodReady) {
